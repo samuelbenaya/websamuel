@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Samuel Benaya - CV & Portfolio</title>
+  <style>
+    :root{
+      --bg:#f6f7fb;
+      --card:#ffffff;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --accent-1:#0f4c81; /* deep blue */
+      --accent-2:#0ea5a4; /* teal */
+      --accent-3:#f59e0b; /* warm gold */
+    }
+    body {
+      font-family: Inter, Arial, sans-serif;
+      margin: 0;
+      background: linear-gradient(180deg,var(--bg),#eef2ff);
+      color: var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    header {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(90deg, rgba(15,76,129,0.45), rgba(19,59,107,0.35));
+      color: white;
+      padding: 34px 20px;
+      text-align: center;
+      box-shadow: 0 6px 18px rgba(15,76,129,0.12);
+      min-height: 300px;
+      display:flex; align-items:center; justify-content:center; flex-direction:column;
+    }
+    /* background image layer (city) */
+    header::before{
+      content:"";
+      position:absolute; inset:0; z-index:0;
+      background-image: url('https://images.unsplash.com/photo-1490578474895-699cd4e2cf59?auto=format&fit=crop&w=1600&q=80');
+      background-size: cover; background-position: center center;
+      transform: scale(1); transition: transform 12s ease;
+      filter: brightness(0.48) saturate(0.95);
+    }
+    header.is-visible::before{ transform: scale(1.08); }
+    header > * { position: relative; z-index: 1; }
+    header h1{ margin:0; font-size:1.75rem; letter-spacing:0.2px; }
+    header p{ margin:6px 0 0; color: rgba(255,255,255,0.9); }
+    section {
+      padding: 22px 26px;
+      background: var(--card);
+      margin: 18px auto;
+      max-width:1000px;
+      border-radius: 10px;
+      box-shadow: 0 6px 16px rgba(16,24,40,0.04);
+      border-left: 6px solid rgba(14,165,164,0.06);
+    }
+    h2 {
+      color: var(--accent-1);
+      margin: 0 0 12px 0;
+      display: inline-block;
+      position: relative;
+      padding-bottom: 6px;
+    }
+    h2::after{
+      content: "";
+      position: absolute;
+      left:0; bottom:0;
+      width:48px; height:4px;
+      background: linear-gradient(90deg,var(--accent-2),var(--accent-3));
+      border-radius:4px;
+    }
+    ul { line-height:1.8; margin:0; padding-left:18px; }
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .info-grid p b{ color:var(--accent-2); }
+    iframe {
+      width: 100%;
+      height: 300px;
+      border-radius: 8px;
+      border: 1px solid rgba(15,76,129,0.06);
+    }
+    footer {
+      text-align: center;
+      padding: 18px 10px;
+      background: transparent;
+      color: var(--muted);
+      font-size:0.95rem;
+    }
+    /* Skills as subtle colored badges */
+    .skills { display:flex; flex-wrap:wrap; gap:8px; padding:0; }
+    .skills li{ list-style:none; background: linear-gradient(90deg, rgba(14,165,164,0.08), rgba(15,76,129,0.04));
+      color:var(--accent-1); padding:8px 12px; border-radius:999px; font-weight:600; font-size:0.95rem; }
+    /* Small responsive tweaks */
+    @media (max-width: 900px){ section{ margin:14px 12px; } .info-grid{ grid-template-columns:1fr; } }
+  </style>
+  <style>
+    /* Header intro animation and scroll hint */
+    .scroll-hint{ margin-top:12px; display:flex; justify-content:center; }
+    .down-arrow{ display:inline-block; animation: bounce 2s infinite; opacity:0.98; }
+    @keyframes bounce{ 0%,20%,50%,80%,100%{ transform: translateY(0);} 40%{ transform: translateY(6px);} 60%{ transform: translateY(3px);} }
+    header{ animation: fadeInUp 700ms ease both; }
+    @keyframes fadeInUp{ from{ opacity:0; transform: translateY(10px);} to{ opacity:1; transform:none;} }
+
+    /* reveal-on-scroll */
+    .reveal{ opacity:0; transform: translateY(10px); transition: all 520ms cubic-bezier(.2,.9,.2,1); }
+    .reveal.is-visible{ opacity:1; transform:none; }
+
+    /* contact area styles */
+    #contact a{ color:var(--accent-1); text-decoration:none; }
+    #contact #copy-phone{ margin-left:8px; background:var(--accent-2); color:white; border:none; padding:6px 10px; border-radius:6px; cursor:pointer; }
+
+    /* simple toast */
+    #toast{ position:fixed; right:18px; bottom:18px; background:#111827; color:white; padding:10px 14px; border-radius:8px; box-shadow:0 6px 20px rgba(16,24,40,0.2); opacity:0; transform: translateY(8px); transition:all 320ms ease; pointer-events:none; z-index:1000; }
+    #toast.show{ opacity:1; transform:none; pointer-events:auto; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Samuel Benaya Mallasak Simanjuntak</h1>
+  <p class="header-sub">Siswa SMA Kelas 10 | Public Speaker | Data Analytics Enthusiast</p>
+  <div class="scroll-hint" aria-hidden="true">
+    <a href="#main" class="down-arrow" aria-label="Scroll to content">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M12 5v14" stroke="rgba(255,255,255,0.9)" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M6 13l6 6 6-6" stroke="rgba(255,255,255,0.95)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+  </div>
+</header>
+
+<section id="main" class="reveal">
+  <h2>Data Pribadi</h2>
+  <div class="info-grid">
+    <p><b>Nama Lengkap:</b> Samuel Benaya Mallasak Simanjuntak</p>
+    <p><b>Tempat, Tgl Lahir:</b> Tangerang Selatan, 25-01-2010</p>
+    <p><b>Jenis Kelamin:</b> Laki-laki</p>
+    <p><b>NIS/NISN:</b> 3287498</p>
+    <p><b>Agama:</b> Kristen</p>
+    <p><b>Kewarganegaraan:</b> WNI</p>
+    <p><b>Alamat:</b> Komplek PU Pasar Jumat No 1/1</p>
+  </div>
+</section>
+
+<section>
+  <h2>Education</h2>
+  <p>SMAN 34 Jakarta – Siswa Kelas 10</p>
+</section>
+
+<section>
+  <h2>Skills</h2>
+  <ul class="skills">
+    <li>Public Speaking Terlatih</li>
+    <li>Komunikasi Efektif</li>
+    <li>Data Analytics</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Experience</h2>
+  <ul>
+    <li>Ketua Paskibra</li>
+    <li>Wakil Ketua OSIS</li>
+    <li>Pengurus Komunitas Kerohanian</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Certification</h2>
+  <ul>
+    <li>Vice President OSIS SMPN 86 Jakarta (2023–2024)</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Lokasi Sekolah</h2>
+  <p>SMAN 34 Jakarta</p>
+  <iframe 
+    src="https://www.google.com/maps?q=SMAN%2034%20Jakarta&output=embed">
+  </iframe>
+</section>
+
+<section id="contact" class="reveal">
+  <h2>Contact Person</h2>
+  <p><b>Samuel Benaya</b></p>
+  <p>
+    <strong>Phone:</strong>
+    <a href="tel:085691935865" id="phone-link">0856-9193-5865</a>
+    <button id="copy-phone" aria-label="Copy phone number">Copy</button>
+  </p>
+  <p>
+    <strong>Instagram:</strong>
+    <a id="instagram-link" href="https://www.instagram.com/samuelbenaya.s?igsh=bjFwNXhuZzFncmFm" target="_blank" rel="noopener noreferrer" aria-label="Open Instagram">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle; margin-right:6px;">
+        <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.2" fill="none"></rect>
+        <path d="M7.5 12.1a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0z" stroke="currentColor" stroke-width="1.2" fill="none"></path>
+        <circle cx="17.5" cy="6.5" r="0.8" fill="currentColor"></circle>
+      </svg>
+      @samuelbenaya.s
+    </a>
+  </p>
+</section>
+
+<footer>
+  <p>© 2026 Samuel Benaya Mallasak Simanjuntak</p>
+</footer>
+
+</body>
+<div id="toast" role="status" aria-live="polite"></div>
+<script>
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click', function(e){
+      const href = this.getAttribute('href');
+      if(href.length>1 && document.querySelector(href)){
+        e.preventDefault();
+        document.querySelector(href).scrollIntoView({behavior:'smooth', block:'start'});
+      }
+    });
+  });
+
+  // Reveal on scroll
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){ entry.target.classList.add('is-visible'); }
+    });
+  },{ threshold:0.12 });
+  document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+  // Copy phone to clipboard + toast
+  const copyBtn = document.getElementById('copy-phone');
+  const phoneLink = document.getElementById('phone-link');
+  const toast = document.getElementById('toast');
+  function showToast(msg){ toast.textContent = msg; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'),2200); }
+  if(copyBtn && phoneLink){
+    copyBtn.addEventListener('click', async ()=>{
+      const number = phoneLink.textContent.replace(/[^0-9+]/g,'');
+      try{
+        await navigator.clipboard.writeText(number);
+        showToast('Phone number copied');
+      }catch(e){
+        // fallback
+        const tmp = document.createElement('input'); tmp.value = number; document.body.appendChild(tmp); tmp.select(); document.execCommand('copy'); tmp.remove(); showToast('Phone number copied');
+      }
+    });
+  }
+
+  // Small accessibility: open instagram in new tab handled by anchor target attribute
+
+  // Optional: reveal header once DOM is ready (small staged animation)
+  window.addEventListener('load', ()=>{
+    document.querySelectorAll('header, .reveal').forEach((el,i)=>{
+      setTimeout(()=> el.classList.add('is-visible'), 120 + i*80);
+    });
+  });
+
+  // ArrowDown keyboard handler: jump to first content section
+  window.addEventListener('keydown', (e)=>{
+    if(e.key === 'ArrowDown' || e.keyCode === 40){
+      const main = document.getElementById('main');
+      if(main){ e.preventDefault(); main.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    }
+  });
+</script>
+</html>
